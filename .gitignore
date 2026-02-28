@@ -3,3 +3,7 @@ __pycache__
 .env
 tester.db
 .wrangler
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
