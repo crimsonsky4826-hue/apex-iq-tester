@@ -1489,7 +1489,17 @@ button.finish .icon{
 	opacity: 1;
 }
 
-.cert-wrapper img{
+.cert-wrapper img,
+.cert-wrapper canvas{
 	width: 100%;
 	box-shadow: 0px 0px 16px 3px rgba(0,0,0,0.64);
+	display: block;
+}
+
+.cert-loading{
+	text-align: center;
+	padding: 60px 20px;
+	font-size: 1.3rem;
+	font-weight: 300;
+	color: gray;
 }

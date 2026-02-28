@@ -93,16 +93,25 @@ export async function onRequestGet(context) {
 			</div>
 		`;
 	} else {
-		// Tier 3 — certificate (generated client-side via Canvas in Phase 4)
-		const cert_url = `${url.origin}/cert/${result.id}`;
+		// Tier 3 — certificate generated client-side via Canvas (cert-generator.js).
+		// Data attributes carry all the info the script needs; no server-side
+		// image generation required.  The wrapper starts hidden and is revealed
+		// once the canvas is fully drawn and a blob URL is available.
 		main_html = `
-			<div class="result cert">
-				<a class="cert-wrapper" href="${cert_url}" download="Certificate.jpg">
-					<img src="${cert_url}" alt="${user_name}'s IQ certificate">
+			<div class="result cert"
+				data-cert-id="${result.id}"
+				data-user-name="${user_name}"
+				data-score="${result.score}"
+				data-submit-time="${result.submit_time}">
+				<div class="cert-loading">Generating your certificate&hellip;</div>
+				<a class="cert-wrapper hidden" href="#" download="IQ-Certificate.jpg">
+					<canvas class="cert-canvas"></canvas>
 				</a>
 			</div>
+			<script src="/assets/js/cert-generator.js"></script>
 		`;
-		og_meta_html += `\n<meta property="og:image" content="${cert_url}" />`;
+		// og:image is not set — cert is generated client-side only.
+		// Social previews for tier-3 show the title/description OG tags instead.
 	}
 
 	const page_html = template

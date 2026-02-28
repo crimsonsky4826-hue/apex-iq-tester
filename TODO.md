@@ -36,7 +36,7 @@
 - [x] Create a static `payment_options.json` with the 3 Stripe Payment Link URLs, replacing the dynamic server route
 - [x] Move `cert_assets/cert_tpl.jpg` into `public/assets/img/` for client-side Canvas cert generation
 - [x] Move cert fonts (Lato-Black, Lato-Light, Lato-Regular .ttf) into `public/assets/fonts/`
-- [ ] Delete Python backend files no longer needed:
+- [x] Delete Python backend files no longer needed:
   - `src/server.py`
   - `src/start_local.py`
   - `src/bottle_app.py`
@@ -46,25 +46,25 @@
   - `requirements.txt`
 
 ## Phase 3 — Port IQ Scoring to Client-Side JavaScript
-- [ ] Port `CORRECT_ANSWERS` array (60 values) from `tester.py` to `tester.js`
-- [ ] Port `SCORE_TO_IQ_MAP` array from `tester.py` to `tester.js`
-- [ ] Port `get_iq_score(answers, age)` function to `tester.js` (array lookups + age brackets)
-- [ ] Call `get_iq_score()` after user enters age, embed score in cookie data alongside answers
-- [ ] **Security consideration:** with scoring client-side, users can inspect `CORRECT_ANSWERS` in JS source. Options:
+- [x] Port `CORRECT_ANSWERS` array (60 values) from `tester.py` to `tester.js`
+- [x] Port `SCORE_TO_IQ_MAP` array from `tester.py` to `tester.js`
+- [x] Port `get_iq_score(answers, age)` function to `tester.js` (array lookups + age brackets)
+- [x] Call `get_iq_score()` after user enters age, embed score in cookie data alongside answers
+- [x] **Security consideration:** with scoring client-side, users can inspect `CORRECT_ANSWERS` in JS source. Options:
   - Accept the risk (most IQ test sites do this)
   - Obfuscate the array (minimal deterrent)
   - Keep scoring server-side in the Worker only (users never see score until after payment)
 
 ## Phase 4 — Port Certificate Generation to Canvas API
-- [ ] Create `cert-generator.js` module with `generateCert(certId, userName, score, submitTime)`:
+- [x] Create `cert-generator.js` module with `generateCert(certId, userName, score, submitTime)`:
   - Load `cert_tpl.jpg` as a Canvas Image
   - Draw user name centered at y=740 (Lato-Light, ~160px)
   - Draw cert ID formatted `XXXX XXXX XXXX` at (495, 1580) (Lato-Regular, ~55px)
   - Draw score centered at y=1150 (Lato-Black, ~200px)
   - Draw formatted date centered at y=1410 (Lato-Light, ~75px)
-- [ ] Load `.ttf` fonts via CSS `@font-face` and reference by family name in `ctx.font`
-- [ ] Export Canvas to downloadable JPEG blob via `canvas.toBlob('image/jpeg')`
-- [ ] Wire up cert download button in the result view to trigger generation
+- [x] Load `.ttf` fonts via CSS `@font-face` and reference by family name in `ctx.font`
+- [x] Export Canvas to downloadable JPEG blob via `canvas.toBlob('image/jpeg')`
+- [x] Wire up cert download button in the result view to trigger generation
 
 ## Phase 5 — Write Cloudflare Workers (Serverless Functions)
 
