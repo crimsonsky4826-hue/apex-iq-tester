@@ -1,0 +1,29 @@
+---
+description: Key CLI commands for deploying and managing this project on Cloudflare
+alwaysApply: false
+---
+
+## Deploy to Cloudflare Pages
+```bash
+npx wrangler pages deploy public --project-name apex-iq-tester
+```
+
+## D1 Database
+```bash
+# Query remote
+npx wrangler d1 execute iq-tester-db --remote --command "SELECT * FROM results LIMIT 10;"
+
+# Run SQL file
+npx wrangler d1 execute iq-tester-db --remote --file schema.sql
+```
+
+## Secrets
+```bash
+npx wrangler pages secret put STRIPE_API_KEY --project-name apex-iq-tester
+npx wrangler pages secret list --project-name apex-iq-tester
+```
+
+## Local Dev
+```bash
+npx wrangler pages dev public
+```

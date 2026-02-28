@@ -1,0 +1,4 @@
+---
+alwaysApply: true
+---
+Test locally using `npx wrangler pages dev src/webroot`
