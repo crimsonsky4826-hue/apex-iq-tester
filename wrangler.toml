@@ -1,0 +1,13 @@
+name = "apex-iq-tester"
+pages_build_output_dir = "public"
+compatibility_date = "2025-01-01"
+
+[dev]
+port = 8080
+
+# ── D1 Database binding ───────────────────────────────────────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "iq-tester-db-test"
+database_id = "0d4a3b3a-788e-425a-bfdc-c9782b9c3491"
+

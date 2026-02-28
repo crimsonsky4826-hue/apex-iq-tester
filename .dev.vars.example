@@ -1,0 +1,32 @@
+# Local development environment variables for Cloudflare Pages Functions.
+# Copy this file to .dev.vars and fill in real values.
+# .dev.vars is gitignored — never commit secrets.
+#
+# Usage: wrangler reads .dev.vars automatically when running:
+#   npx wrangler pages dev public/
+#
+# For production, set these in Cloudflare Pages Dashboard:
+#   Settings → Environment variables → Add variable (mark as Secret)
+
+# ── Stripe ────────────────────────────────────────────────────────────────────
+# Your Stripe secret key (test mode: sk_test_..., live mode: sk_live_...)
+STRIPE_API_KEY=sk_test_REPLACE_ME
+
+# Payment Link IDs (plink_...) — NOT the full buy.stripe.com URL.
+# Find these in Stripe Dashboard → Payment Links → click a link → the ID is
+# in the URL: dashboard.stripe.com/test/payment-links/plink_XXXXX
+TIER1_LINK_ID=plink_REPLACE_ME_TIER1
+TIER2_LINK_ID=plink_REPLACE_ME_TIER2
+TIER3_LINK_ID=plink_REPLACE_ME_TIER3
+
+# ── Result page settings ──────────────────────────────────────────────────────
+# How many hours a tier-1 (Minimal, $5) result link stays valid before expiring.
+TEMP_LINK_LIFETIME_HOURS=24
+
+# Your contact email shown in error messages.
+ADMIN_CONTACT=you@example.com
+
+# ShareThis embed script tag, or leave empty to disable social sharing widget.
+# Example: <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#..."></script>
+SHARETHIS_ADDIN=
+

@@ -11,15 +11,24 @@ npx wrangler pages deploy public --project-name apex-iq-tester
 ## D1 Database
 ```bash
 # Query remote
-npx wrangler d1 execute iq-tester-db --remote --command "SELECT * FROM results LIMIT 10;"
+npx wrangler d1 execute iq-tester-db-test --remote --command "SELECT * FROM results LIMIT 10;"
 
 # Run SQL file
-npx wrangler d1 execute iq-tester-db --remote --file schema.sql
+npx wrangler d1 execute iq-tester-db-test --remote --file schema.sql
 ```
 
 ## Secrets
+Push all secrets from .dev.vars to Cloudflare Pages (run each, paste value when prompted):
 ```bash
 npx wrangler pages secret put STRIPE_API_KEY --project-name apex-iq-tester
+npx wrangler pages secret put TIER1_LINK_ID --project-name apex-iq-tester
+npx wrangler pages secret put TIER2_LINK_ID --project-name apex-iq-tester
+npx wrangler pages secret put TIER3_LINK_ID --project-name apex-iq-tester
+npx wrangler pages secret put TEMP_LINK_LIFETIME_HOURS --project-name apex-iq-tester
+npx wrangler pages secret put ADMIN_CONTACT --project-name apex-iq-tester
+npx wrangler pages secret put SHARETHIS_ADDIN --project-name apex-iq-tester
+
+# List all secrets currently set
 npx wrangler pages secret list --project-name apex-iq-tester
 ```
 

@@ -69,8 +69,8 @@
 ## Phase 5 — Write Cloudflare Workers (Serverless Functions)
 
 ### 5A — `/accept_payment` Worker
-- [ ] Create `functions/accept_payment.js`
-- [ ] Port logic from `server.py` + `tester.py` `accept_payment()`:
+- [x] Create `functions/accept_payment.js`
+- [x] Port logic from `server.py` + `tester.py` `accept_payment()`:
   1. Read `stripe_session_token` from query string
   2. Read `tester_data` from cookie, JSON-parse it
   3. Call Stripe API via fetch: `GET https://api.stripe.com/v1/checkout/sessions/{id}` with `Authorization: Bearer STRIPE_API_KEY`
@@ -80,37 +80,40 @@
   7. Generate random 12-digit result ID, verify uniqueness in D1
   8. Insert result row into D1
   9. Redirect to `/result/tier-{tier}/{id}`
-- [ ] Bind D1 database to the Worker in `wrangler.toml` or Pages settings
+- [x] Bind D1 database to the Worker in `wrangler.toml` or Pages settings
 
 ### 5B — `/result/` Worker (dynamic result pages with OG meta)
-- [ ] Create `functions/result/[[path]].js`
-- [ ] Port logic from `tester.py` `get_result_page()`:
+- [x] Create `functions/result/[[path]].js`
+- [x] Port logic from `tester.py` `get_result_page()`:
   1. Look up result in D1 by ID
   2. Handle tier-1 expiry (compare `submit_time + TEMP_LINK_LIFETIME_HOURS` vs now)
   3. Build HTML with OG meta tags for social sharing
   4. Tier 1 & 2: render plain score HTML
   5. Tier 3: render cert image tag (pointing at Canvas generation or cached image)
-- [ ] Embed `result_template.html` as template string or load from static assets
-- [ ] Implement `sanitize_html()` (escape `&`, `<`, `>`)
+- [x] Embed `result_template.html` as template string or load from static assets
+- [x] Implement `sanitize_html()` (escape `&`, `<`, `>`)
 
 ### 5C — `/cert/` Worker (optional — for OG image support)
-- [ ] **Decision point:** social media crawlers need a real image URL for `og:image`. Options:
-  - (a) Skip OG cert images (social shares show text-only) → no Worker needed
+- [x] **Decision:** chose option (a) — skip OG cert images. Cert is generated client-side via Canvas. Social shares for tier-3 show title/description OG tags only. Options were:
+  - **(a) Skip OG cert images (social shares show text-only) → no Worker needed** ← chosen
   - (b) Pre-generate certs at payment time, store in Cloudflare R2 (10GB free) → `/cert/<id>` serves from R2
   - (c) Generate in Worker via Wasm image library (complex, not recommended)
 
 ## Phase 6 — Update Frontend JavaScript
-- [ ] Ensure `tester_data` cookie has `SameSite=Lax; Path=/` so the Worker can read it after Stripe redirect
-- [ ] Keep `load_payment_options()` pointing at the static `payment_options.json` file
-- [ ] Fix CSS path in `result_template.html`: change `../../assets/css/main.css` to `/assets/css/main.css` (absolute)
-- [ ] Add cert Canvas generation trigger on tier-3 result page
-- [ ] Verify the `tester_data` cookie survives the Stripe redirect (cross-origin cookie issues)
+- [x] Ensure `tester_data` cookie has `SameSite=Lax; Path=/` so the Worker can read it after Stripe redirect
+- [x] Keep `load_payment_options()` pointing at the static `payment_options.json` file
+- [x] Fix CSS path in `result_template.html`: change `../../assets/css/main.css` to `/assets/css/main.css` (absolute)
+- [x] Add cert Canvas generation trigger on tier-3 result page
+- [ ] Verify the `tester_data` cookie survives the Stripe redirect (cross-origin cookie issues) — runtime test, do during Phase 9
 
 ## Phase 7 — Cloudflare Configuration & Deployment
-- [ ] Create `wrangler.toml` in repo root with D1 binding
-- [ ] Configure Pages build output directory
-- [ ] Set Functions directory to `functions/`
-- [ ] Add all secrets via `wrangler secret put STRIPE_API_KEY` (etc.)
+- [x] Create `wrangler.toml` in repo root with D1 binding
+- [x] Configure Pages build output directory (`pages_build_output_dir = "public"` in `wrangler.toml`)
+- [x] Set Functions directory to `functions/` (auto-detected by Cloudflare Pages, no extra config needed)
+- [ ] Add all secrets in Cloudflare Pages Dashboard → Settings → Environment variables (mark each as Secret):
+  - `STRIPE_API_KEY`, `TIER1_LINK_ID`, `TIER2_LINK_ID`, `TIER3_LINK_ID`
+  - `TEMP_LINK_LIFETIME_HOURS`, `ADMIN_CONTACT`, `SHARETHIS_ADDIN`
+  - For local dev: copy `.dev.vars.example` → `.dev.vars` and fill in values
 - [ ] Deploy: `npx wrangler pages deploy public/`
 - [ ] Configure custom domain in Cloudflare Pages dashboard
 - [ ] Set Cloudflare SSL/TLS to Full (strict) if using custom domain
