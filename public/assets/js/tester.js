@@ -1,5 +1,45 @@
 "use strict";
 
+// ── Scoring data (ported from tester.py) ──────────────────────────────────────
+// Correct answer index is 1-based; user answers are stored 0-based, so we
+// compare: answers[i] + 1 === CORRECT_ANSWERS[i]
+const CORRECT_ANSWERS = [
+	4, 5, 1, 2, 6, 3, 6, 2, 1, 3, 4, 5, 2, 6, 1, 2, 1, 3, 5,
+	6, 4, 3, 4, 5, 8, 2, 3, 8, 7, 4, 5, 1, 7, 6, 1, 2, 3, 4, 3, 7, 8, 6, 5,
+	4, 1, 2, 5, 6, 7, 6, 8, 2, 1, 5, 1, 6, 3, 2, 4, 5
+];
+
+// Index = number of correct answers (0–60). null means score < 15 → clamp to 60.
+const SCORE_TO_IQ_MAP = [
+	null, null, null, null, null, null, null, null, null, null,
+	null, null, null, null, null,
+	62, 65, 65, 66, 67, 69, 70, 71, 72, 73, 75,
+	76, 77, 79, 80, 82, 83, 84, 86, 87, 88, 90, 91, 92, 94, 95, 96, 98, 99,
+	100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128,
+	130, 140
+];
+
+function get_iq_score(answers, age){
+	let answered_correctly = 0;
+	for(let i = 0; i < answers.length; i++){
+		if(answers[i] + 1 === CORRECT_ANSWERS[i])
+			answered_correctly++;
+	}
+
+	const base_score = SCORE_TO_IQ_MAP[answered_correctly] ?? 60;
+
+	let age_quotient = 100;
+	if(age > 30) age_quotient = 97;
+	if(age > 35) age_quotient = 93;
+	if(age > 40) age_quotient = 88;
+	if(age > 45) age_quotient = 82;
+	if(age > 50) age_quotient = 76;
+	if(age > 55) age_quotient = 70;
+
+	return Math.floor(base_score / 100 * age_quotient);
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 class Tester{
 	constructor(){
 		this.last_answered = -1;
@@ -686,13 +726,20 @@ class Tester{
 	}
 	
 	async fill_result_cookie(){
+		const age       = await this.user_age;
+		const user_name = await this.user_name;
+		const score     = get_iq_score(this.answers, age);
+
 		const data = {
-			answers: this.answers,
-			age: await this.user_age,
-			user_name: await this.user_name
-		}
-		document.cookie = "tester_data=" + 
-			encodeURIComponent(JSON.stringify(data));
+			answers:   this.answers,
+			age:       age,
+			user_name: user_name,
+			score:     score
+		};
+		// SameSite=Lax; Path=/ ensures the cookie survives the Stripe redirect
+		document.cookie = "tester_data=" +
+			encodeURIComponent(JSON.stringify(data)) +
+			"; SameSite=Lax; Path=/";
 	}
 	
 	async on_payment(tier){

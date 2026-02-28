@@ -32,10 +32,10 @@
   - `SHARETHIS_ADDIN` — ShareThis script tag (or empty)
 
 ## Phase 2 — Restructure Repo for Static Deployment
-- [ ] Move `src/webroot/` contents to root-level `public/` (or configure Cloudflare Pages build output to `src/webroot`)
-- [ ] Create a static `payment_options.json` with the 3 Stripe Payment Link URLs, replacing the dynamic server route
-- [ ] Move `cert_assets/cert_tpl.jpg` into `public/assets/img/` for client-side Canvas cert generation
-- [ ] Move cert fonts (Lato-Black, Lato-Light, Lato-Regular .ttf) into `public/assets/fonts/`
+- [x] Move `src/webroot/` contents to root-level `public/` (or configure Cloudflare Pages build output to `src/webroot`)
+- [x] Create a static `payment_options.json` with the 3 Stripe Payment Link URLs, replacing the dynamic server route
+- [x] Move `cert_assets/cert_tpl.jpg` into `public/assets/img/` for client-side Canvas cert generation
+- [x] Move cert fonts (Lato-Black, Lato-Light, Lato-Regular .ttf) into `public/assets/fonts/`
 - [ ] Delete Python backend files no longer needed:
   - `src/server.py`
   - `src/start_local.py`
